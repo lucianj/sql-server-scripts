@@ -87,3 +87,40 @@ SELECT * FROM T_clu where f = 1;
 
 CREATE INDEX idx_fornecedores_cidade 
 ON tb_fornecedores (CIDADE) INCLUDE (NOME, CREDITO, DATA_CADASTRO);
+
+CREATE NONCLUSTERED INDEX idx_tb_item_codigo_produto ON tb_item (codigo_produto)
+INCLUDE (numero, quantidade, preco);
+
+ALTER TABLE tb_cidade ADD CONSTRAINT pk_tb_cidade PRIMARY KEY (cidade);
+ALTER TABLE tb_classificacao ADD CONSTRAINT pk_tb_classificacao PRIMARY KEY (codigo_classificacao);
+ALTER TABLE tb_cliente ADD CONSTRAINT pk_tb_cliente PRIMARY KEY (cpf);
+ALTER TABLE tb_estado ADD CONSTRAINT pk_tb_estado PRIMARY KEY (sigla_estado);
+ALTER TABLE tb_loja ADD CONSTRAINT pk_tb_loja PRIMARY KEY (codigo_loja);
+ALTER TABLE tb_produto ADD CONSTRAINT pk_tb_produto PRIMARY KEY (codigo_produto);
+
+ALTER TABLE tb_nota ADD CONSTRAINT pk_tb_nota PRIMARY KEY (numero);
+ALTER TABLE tb_item ADD CONSTRAINT pk_tb_item PRIMARY KEY (numero, codigo_produto);
+
+ALTER TABLE [dbo].[tb_cidade] ADD CONSTRAINT [fk_tb_cidade_sigla_estado] FOREIGN KEY([sigla_estado])
+REFERENCES [dbo].[tb_estado] ([sigla_estado])
+
+ALTER TABLE [dbo].[tb_cliente] ADD CONSTRAINT [fk_tb_cliente_cidade] FOREIGN KEY([cidade])
+REFERENCES [dbo].[tb_cidade] ([cidade])
+
+ALTER TABLE [dbo].[tb_item] ADD CONSTRAINT [fk_tb_item_codigo_produto] FOREIGN KEY([codigo_produto])
+REFERENCES [dbo].[tb_produto] ([codigo_produto])
+
+ALTER TABLE [dbo].[tb_item] ADD CONSTRAINT [fk_tb_item_numero] FOREIGN KEY([numero])
+REFERENCES [dbo].[tb_nota] ([numero])
+
+ALTER TABLE [dbo].[tb_loja] ADD CONSTRAINT [fk_tb_loja_cidade] FOREIGN KEY([cidade])
+REFERENCES [dbo].[tb_cidade] ([cidade])
+
+ALTER TABLE [dbo].[tb_nota] ADD CONSTRAINT [fk_tb_nota_cliente] FOREIGN KEY([cpf])
+REFERENCES [dbo].[tb_cliente] ([cpf])
+
+ALTER TABLE [dbo].[tb_nota] ADD CONSTRAINT [fk_tb_nota_loja] FOREIGN KEY([codigo_loja])
+REFERENCES [dbo].[tb_loja] ([codigo_loja])
+
+ALTER TABLE [dbo].[tb_produto] ADD CONSTRAINT [fk_tb_produto_codigo_classificacao] FOREIGN KEY([codigo_classificacao])
+REFERENCES [dbo].[tb_classificacao] ([codigo_classificacao])
